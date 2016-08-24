@@ -640,7 +640,7 @@ class Router
      */
     public function gatherRouteMiddlewares($route)
     {
-        return $this->adapter->gatherRouteMiddlewares($route);
+        return $this->adapter->gatherRouteMiddleware($route);
     }
 
     /**
