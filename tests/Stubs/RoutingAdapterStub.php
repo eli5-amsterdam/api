@@ -3,12 +3,14 @@
 namespace Dingo\Api\Tests\Stubs;
 
 use Closure;
-use Illuminate\Container\Container;
-use Illuminate\Http\Request;
 use Dingo\Api\Http\Response;
-use Dingo\Api\Contract\Routing\Adapter;
-use Illuminate\Http\Response as IlluminateResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Pipeline\Pipeline;
+use Illuminate\Container\Container;
+use Dingo\Api\Contract\Routing\Adapter;
+use Illuminate\Routing\Route as IlluminateRoute;
+use Illuminate\Http\Response as IlluminateResponse;
 
 class RoutingAdapterStub implements Adapter
 {
@@ -45,7 +47,11 @@ class RoutingAdapterStub implements Adapter
 
     protected function prepareResponse($request, $response)
     {
-        if (! $response instanceof Response && ! $response instanceof IlluminateResponse) {
+        if ($response instanceof IlluminateResponse) {
+            $response = Response::makeFromExisting($response);
+        } elseif ($response instanceof JsonResponse) {
+            $response = Response::makeFromJson($response);
+        } else {
             $response = new Response($response);
         }
 
@@ -66,7 +72,7 @@ class RoutingAdapterStub implements Adapter
     {
         $this->createRouteCollections($versions);
 
-        $route = new \Illuminate\Routing\Route($methods, $uri, $action);
+        $route = new IlluminateRoute($methods, $uri, $action);
         $this->addWhereClausesToRoute($route);
 
         foreach ($versions as $version) {

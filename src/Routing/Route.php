@@ -146,8 +146,6 @@ class Route
 
     /**
      * Setup the route properties.
-     *
-     * @return void
      */
     protected function setupRouteProperties(Request $request, $route)
     {
@@ -175,8 +173,6 @@ class Route
 
     /**
      * Merge the controller properties onto the route properties.
-     *
-     * @return void
      */
     protected function mergeControllerProperties()
     {
@@ -223,10 +219,9 @@ class Route
     /**
      * Find the controller options and whether or not it will apply to this routes controller method.
      *
-     * @param string   $option
-     * @param \Closure $callback
+     * @param string $name
      *
-     * @return void
+     * @return array
      */
     protected function findControllerPropertyOptions($name)
     {
@@ -300,7 +295,7 @@ class Route
             $traits = array_merge(class_uses($trait, false), $traits);
         }
 
-        return isset($traits['Dingo\Api\Routing\Helpers']);
+        return isset($traits[Helpers::class]);
     }
 
     /**
